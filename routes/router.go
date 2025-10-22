@@ -22,9 +22,15 @@ func SetupRouter() *gin.Engine {
 	r.GET("/users", handlers.GetUsers)
 	r.GET("/users/:id", handlers.GetUserByID)
 	r.POST("/users", handlers.CreateUser)
+	r.PUT("/users/:id", handlers.UpdateUser)
+	r.DELETE("/users/:id", handlers.DeleteUser)
 
 	// 文章相关接口
 	r.GET("/articles", handlers.GetArticles)
+	r.GET("/articles/:id", handlers.GetArticleByID)
+	r.POST("/articles", handlers.CreateArticle)
+	r.PUT("/articles/:id", handlers.UpdateArticle)
+	r.DELETE("/articles/:id", handlers.DeleteArticle)
 
 	return r
 }
