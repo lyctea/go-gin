@@ -20,6 +20,18 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
+type Article struct {
+	ID      int    `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+}
+
+type ArticleResponse struct {
+	Code    int       `json:"code"`
+	Message string    `json:"message"`
+	Data    []Article `json:"data"`
+}
+
 func main() {
 	// 创建Gin路由引擎
 	r := gin.Default()
@@ -88,6 +100,20 @@ func main() {
 			Code:    201,
 			Message: "创建用户成功",
 			Data:    user,
+		})
+	})
+
+	r.GET("/articles", func(c *gin.Context) {
+		articles := []Article{
+			{ID: 1, Title: "标题1", Content: "内容1"},
+			{ID: 2, Title: "标题2", Content: "内容2"},
+			{ID: 3, Title: "标题3", Content: "内容3"},
+		}
+
+		c.JSON(http.StatusOK, Response{
+			Code:    200,
+			Message: "获取文章列表成功",
+			Data:    articles,
 		})
 	})
 
