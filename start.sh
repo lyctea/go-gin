@@ -57,7 +57,7 @@ if [ -f "${PID_FILE}" ]; then
 fi
 
 # 检查端口是否被占用
-PORT=8080
+PORT=9000
 if lsof -Pi :${PORT} -sTCP:LISTEN -t >/dev/null 2>&1; then
     echo -e "${RED}错误: 端口 ${PORT} 已被占用${NC}"
     echo "占用端口的进程："
