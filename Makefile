@@ -1,9 +1,10 @@
-.PHONY: build run test clean tidy install help dev
+.PHONY: build run test clean tidy install help dev stop restart status
 
 # 变量定义
 BINARY_NAME=go-gin
 GO=go
 GOFLAGS=-v
+PORT=9000
 
 # 默认目标
 .DEFAULT_GOAL := help
@@ -14,10 +15,24 @@ build:
 	$(GO) build $(GOFLAGS) -o $(BINARY_NAME) main.go
 	@echo "编译完成: $(BINARY_NAME)"
 
+# 停止服务
+stop:
+	@echo "正在停止服务..."
+	@-lsof -ti:$(PORT) | xargs kill -9 2>/dev/null || echo "没有运行中的服务"
+	@echo "服务已停止"
+
+# 检查服务状态
+status:
+	@echo "检查端口 $(PORT) 状态..."
+	@-lsof -i:$(PORT) || echo "端口 $(PORT) 未被占用"
+
 # 运行项目
-run:
+run: stop
 	@echo "正在运行项目..."
 	$(GO) run main.go
+
+# 重启项目
+restart: stop run
 
 # 开发模式（使用 air 或直接运行）
 dev: run
@@ -70,7 +85,10 @@ check: fmt vet test
 help:
 	@echo "可用的 make 命令："
 	@echo "  make build      - 编译项目"
-	@echo "  make run        - 运行项目（开发模式）"
+	@echo "  make run        - 运行项目（会自动停止旧进程）"
+	@echo "  make stop       - 停止运行中的服务"
+	@echo "  make restart    - 重启服务"
+	@echo "  make status     - 检查服务状态"
 	@echo "  make dev        - 开发模式（同 run）"
 	@echo "  make test       - 运行测试"
 	@echo "  make clean      - 清理编译文件"
